@@ -87,7 +87,7 @@ if(email && password){
                 alertIcon: "success",
                 showConfirmButton: false,
                 timer: 1500,
-                ruta:''
+                ruta:'/'
             });
         }
         res.end();
