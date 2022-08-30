@@ -41,10 +41,11 @@ app.post('/registroCliente',async(req,res)=>{
     const nombre = req.body.nombre;
     const apellido = req.body.apellido;
     const localidad = req.body.localidad;
+    const direccion = req.body.direccion;
     const email = req.body.email;
     const password = req.body.password;
     let passwordHaash = await bcryptjs.hash(password, 8);
-    connection.query('INSERT INTO cliente SET ?',{nombre:nombre,apellido:apellido,localidad:localidad,email:email,password:passwordHaash}, async(error, results)=>{
+    connection.query('INSERT INTO cliente SET ?',{nombre:nombre,apellido:apellido,localidad:localidad,direccion:direccion,email:email,password:passwordHaash}, async(error, results)=>{
         if(error){
             console.log(error);
         }else{
@@ -105,19 +106,19 @@ if(email && password){
 }
 })
 
-app.get('/', (req, res)=> {
-	if (req.session.loggedin) {
-		res.render('index',{
-			login: true,
-			name: req.session.email		
-		});		
-	} else {
-		res.render('index',{
-			login:false,
-			name:'Debe iniciar sesión',			
-		});				
-	}
-	res.end();
+app.get('/', (req, res) => {
+    if (req.session.loggedin) {
+        res.render('index', {
+            login: true,
+            name: req.session.name
+        });
+    } else {
+        res.render('index', {
+            login: false,
+            name: 'Debe iniciar sesión',
+        });
+    }
+    res.end();
 });
 
 app.listen(3000,(req, res)=>{

@@ -62,3 +62,18 @@ overflow: hidden;
         background-color: orange;
         color: black;
     }
+
+    .textParallax{
+        font-size: 36px;
+        background-image: url(/muro-hormigon-gris-claro_53876-89532.jpg);
+        background-repeat: repeat;
+        background-position: center;
+        background-size: contain;
+        background-attachment: fixed;
+    
+        height: 150px;
+    }
+
+    .btn-primary{
+        background-color: orange;
+    }
