@@ -100,7 +100,7 @@ if(email && password){
         alertMessage: "Por favor ingrese un usuario o password",
         alertIcon: "warning",
         showConfirmButton: true,
-        timer: 1500,
+        timer: false,
         ruta:'iniciarSesion'
     });
 }
@@ -120,6 +120,12 @@ app.get('/', (req, res) => {
     }
     res.end();
 });
+
+app.get('/logout', (req, res)=>{
+    req.session.destroy(()=>{
+        res.redirect('/')
+    })
+})
 
 app.listen(3000,(req, res)=>{
     console.log('SERVER RUNNING IN http://localhost:3000');

@@ -77,3 +77,31 @@ overflow: hidden;
     .btn-primary{
         background-color: orange;
     }
+
+    .btnCerrarSesion{
+        
+    }
+
+
+
+
+    .form-control.falla input{
+        border-color: #fe5f55;
+    }
+    
+    .form-control.ok input{
+        border-color: #08ffc8;
+    }
+    
+    p{
+        visibility: hidden;
+        font-size: small;
+        font-weight: 500;
+        text-align: left;
+    }
+    
+    
+    .form-control.falla p{
+        visibility: visible;
+        color: #e74c3c;
+    }
