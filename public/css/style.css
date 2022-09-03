@@ -1,0 +1,107 @@
+.navbar{
+    background-color: #f7aa00;
+}
+
+#carouselPrincipal{
+object-fit: cover;
+height: 30rem;
+width: 80%;
+overflow: hidden;
+}
+
+.search{
+    position: relative;
+    box-shadow: 0 0 40px rgba(51, 51, 51, .1);
+      
+    }
+
+    .search input{
+
+     height: 60px;
+     text-indent: 25px;
+     border: 2px solid #d6d4d4;
+
+
+    }
+
+
+    .search input:focus{
+
+     box-shadow: none;
+     border: 2px solid orange;
+
+
+    }
+
+    .search .fa-search{
+
+     position: absolute;
+     top: 20px;
+     left: 16px;
+
+    }
+
+    .search button{
+
+     position: absolute;
+     top: 5px;
+     right: 5px;
+     height: 50px;
+     width: 110px;
+     background: #f7aa00;
+     border-color: wheat;
+     color:black;
+     ;
+
+    }
+    .search button:hover{
+        background-color: orange;
+        color: black;
+    }
+    .search button:focus{
+        background-color: orange;
+        color: black;
+    }
+
+    .textParallax{
+        font-size: 36px;
+        background-image: url(/muro-hormigon-gris-claro_53876-89532.jpg);
+        background-repeat: repeat;
+        background-position: center;
+        background-size: contain;
+        background-attachment: fixed;
+    
+        height: 150px;
+    }
+
+    .btn-primary{
+        background-color: orange;
+    }
+
+    .btnCerrarSesion{
+        
+    }
+
+
+
+
+    .form-control.falla input{
+        border-color: #fe5f55;
+    }
+    
+    .form-control.ok input{
+        border-color: #08ffc8;
+    }
+    
+    p{
+        visibility: hidden;
+        font-size: small;
+        font-weight: 500;
+        text-align: left;
+    }
+    
+    
+    .form-control.falla p{
+        visibility: visible;
+        color: #e74c3c;
+    }
