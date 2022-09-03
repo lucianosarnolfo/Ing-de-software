@@ -2,6 +2,7 @@
 const express = require('express');
 const app = new express();
 
+
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
@@ -40,21 +41,39 @@ app.post('/registroCliente', async (req, res) => {
     const nombre = req.body.nombre;
     const apellido = req.body.apellido;
     const localidad = req.body.localidad;
+    const direccion = req.body.direccion;
     const email = req.body.email;
     const password = req.body.password;
     let passwordHaash = await bcryptjs.hash(password, 8);
-    connection.query('INSERT INTO cliente SET ?', { nombre: nombre, apellido: apellido, localidad: localidad, email: email, password: passwordHaash }, async (error, results) => {
-        if (error) {
-            console.log(error);
-        } else {
+
+    connection.query('SELECT * FROM `cliente` WHERE `email` = ?', [email], (err, result) => {
+        if (err) throw err;
+        if (result.length > 0) {
             res.render('registroCliente', {
                 alert: true,
                 alertTitle: "Registro",
-                alertMessage: "¡Registro exitoso!",
-                alertIcon: 'success',
+                alertMessage: "Este e-mail ya se encuentra registrado",
+                alertIcon: 'error',
                 showConfirmButton: false,
-                timer: 1500,
+                timer: 2000,
                 ruta: ''
+            })
+        }
+        else {
+            connection.query('INSERT INTO cliente SET ?', { nombre: nombre, apellido: apellido, localidad: localidad, direccion: direccion, email: email, password: passwordHaash }, async (error, results) => {
+                if (error) {
+                    console.log(error);
+                } else {
+                    res.render('registroCliente', {
+                        alert: true,
+                        alertTitle: "Registro",
+                        alertMessage: "¡Registro exitoso!",
+                        alertIcon: 'success',
+                        showConfirmButton: false,
+                        timer: 1500,
+                        ruta: ''
+                    })
+                }
             })
         }
     })
@@ -98,7 +117,7 @@ app.post('/auth', async (req, res) => {
             alertMessage: "Por favor ingrese un usuario o password",
             alertIcon: "warning",
             showConfirmButton: true,
-            timer: 1500,
+            timer: false,
             ruta: 'iniciarSesion'
         });
     }
@@ -118,6 +137,12 @@ app.get('/', (req, res) => {
     }
     res.end();
 });
+
+app.get('/logout', (req, res) => {
+    req.session.destroy(() => {
+        res.redirect('/')
+    })
+})
 
 app.listen(3000, (req, res) => {
     console.log('SERVER RUNNING IN http://localhost:3000');
