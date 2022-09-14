@@ -46,10 +46,12 @@ app.post('/registroCliente', async (req, res) => {
     const password = req.body.password;
     let passwordHaash = await bcryptjs.hash(password, 8);
 
+
     connection.query('SELECT * FROM `cliente` WHERE `email` = ?', [email], (err, result) => {
         if (err) throw err;
         if (result.length > 0) {
             res.render('registroCliente', {
+
                 alert: true,
                 alertTitle: "Registro",
                 alertMessage: "Este e-mail ya se encuentra registrado",
@@ -121,6 +123,7 @@ app.post('/auth', async (req, res) => {
             ruta: 'iniciarSesion'
         });
     }
+
 })
 
 app.get('/', (req, res) => {
@@ -138,13 +141,17 @@ app.get('/', (req, res) => {
     res.end();
 });
 
+
 app.get('/logout', (req, res) => {
     req.session.destroy(() => {
+
         res.redirect('/')
     })
 })
 
+
 app.listen(3000, (req, res) => {
+
     console.log('SERVER RUNNING IN http://localhost:3000');
 }
 )
