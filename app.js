@@ -36,7 +36,22 @@ app.get('/registroCliente', (req, res) => {
     res.render('registroCliente');
 }
 )
+app.get('/paginaCliente', (req, res) =>{
+    res.render('paginaCliente');
+}
+)
+app.get('/registroServicio', (req, res) =>{
+    res.render('registroServicio');
+}
+)
+app.get('/paginaServicio',(req,res)=>{
+    res.render('paginaServicio');
+})
 
+
+
+
+//registro
 app.post('/registroCliente', async (req, res) => {
     const nombre = req.body.nombre;
     const apellido = req.body.apellido;
@@ -80,7 +95,7 @@ app.post('/registroCliente', async (req, res) => {
         }
     })
 })
-
+//iniciar sesion
 app.post('/auth', async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
@@ -126,6 +141,7 @@ app.post('/auth', async (req, res) => {
 
 })
 
+//login
 app.get('/', (req, res) => {
     if (req.session.loggedin) {
         res.render('index', {
@@ -141,6 +157,16 @@ app.get('/', (req, res) => {
     res.end();
 });
 
+app.get('/paginaCliente', (req, res) => {
+   
+        res.render('paginaCliente', {
+            login: true,
+            name: req.session.name
+        });
+   
+    res.end();
+    });
+
 
 app.get('/logout', (req, res) => {
     req.session.destroy(() => {
@@ -148,7 +174,7 @@ app.get('/logout', (req, res) => {
         res.redirect('/')
     })
 })
-
+//fin de login
 
 app.listen(3000, (req, res) => {
 
