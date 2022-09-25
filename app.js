@@ -95,6 +95,32 @@ app.post('/registroCliente', async (req, res) => {
         }
     })
 })
+
+//registro servicio
+app.post('/registroServicio',async(req,res)=> {
+    const nombreServicio = req.body.nombreServicio;
+    const localidad = req.body.localidad;
+    const direccion = req.body.direccion;
+    const telefono = req.body.telefono;
+
+    connection.query('INSERT INTO servicio SET ?', {nombreServicio: nombreServicio, localidad: localidad, direccion:direccion, telefono:telefono}, async(error, results)=>{
+        if(error){
+            console.log(error);
+        }else{
+            res.render('registroServicio',{
+                alert: true,
+                alertTitle: "Registro",
+                alertMessage: "¡Registro exitoso!",
+                alertIcon: 'success',
+                showConfirmButton: false,
+                timer: 1500,
+                ruta: ''
+            })
+        }
+    })
+})
+
+
 //iniciar sesion
 app.post('/auth', async (req, res) => {
     const email = req.body.email;
@@ -158,7 +184,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/paginaCliente', (req, res) => {
-   
+   console.log(req);
         res.render('paginaCliente', {
             login: true,
             name: req.session.name
