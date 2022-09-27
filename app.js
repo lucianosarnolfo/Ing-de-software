@@ -27,31 +27,39 @@ app.use(session({
 
 const connection = require('./database/db');
 
-
+//Vistas
 app.get('/iniciarSesion', (req, res) => {
     res.render('iniciarSesion');
 }
 )
-app.get('/registroCliente', (req, res) => {
+
+app.get('/registroCliente', (req,res)=>{
     res.render('registroCliente');
 }
 )
-app.get('/paginaCliente', (req, res) =>{
-    res.render('paginaCliente');
-}
-)
-app.get('/registroServicio', (req, res) =>{
-    res.render('registroServicio');
-}
-)
+
 app.get('/paginaServicio',(req,res)=>{
     res.render('paginaServicio');
 })
 
+app.get('/paginaCliente', (req, res) => {
+    console.log(req.session.user_id);
+         res.render('paginaCliente', {
+             login: true,
+             name: req.session.name,
+             surname: req.session.surname,
+             email: req.session.email,
+             location: req.session.location,
+             direction: req.session.direccion
+         });
+    
+     res.end();
+     });
+app.get('/registroServicio', (req, res)=>{
+    res.render('registroServicio');
+})
 
-
-
-//registro
+//registro cliente
 app.post('/registroCliente', async (req, res) => {
     const nombre = req.body.nombre;
     const apellido = req.body.apellido;
@@ -98,12 +106,14 @@ app.post('/registroCliente', async (req, res) => {
 
 //registro servicio
 app.post('/registroServicio',async(req,res)=> {
-    const nombreServicio = req.body.nombreServicio;
+    const id = req.session.user_id;
+    const nombreNegocio = req.body.nombreNegocio;
     const localidad = req.body.localidad;
     const direccion = req.body.direccion;
     const telefono = req.body.telefono;
+    const tipo = req.body.tipo;
 
-    connection.query('INSERT INTO servicio SET ?', {nombreServicio: nombreServicio, localidad: localidad, direccion:direccion, telefono:telefono}, async(error, results)=>{
+    connection.query('INSERT INTO servicio SET ?', {nombreNegocio: nombreNegocio, localidad: localidad, direccion:direccion, telefono:telefono, idCliente: id, tipoDeServicio: tipo}, async(error, results)=>{
         if(error){
             console.log(error);
         }else{
@@ -114,7 +124,7 @@ app.post('/registroServicio',async(req,res)=> {
                 alertIcon: 'success',
                 showConfirmButton: false,
                 timer: 1500,
-                ruta: ''
+                ruta: 'paginaServicio'
             })
         }
     })
@@ -141,6 +151,12 @@ app.post('/auth', async (req, res) => {
             } else {
                 req.session.loggedin = true;
                 req.session.name = results[0].nombre;
+                req.session.surname = results[0].apellido;
+                req.session.email = results[0].email;
+                req.session.location = results[0].localidad;
+                req.session.direction = results[0].direccion;
+                req.session.user_id = results[0].id;
+
                 res.render('iniciarSesion', {
                     alert: true,
                     alertTitle: "Conexion exitosa",
@@ -167,7 +183,7 @@ app.post('/auth', async (req, res) => {
 
 })
 
-//login
+//iniciar sesion
 app.get('/', (req, res) => {
     if (req.session.loggedin) {
         res.render('index', {
@@ -183,24 +199,16 @@ app.get('/', (req, res) => {
     res.end();
 });
 
-app.get('/paginaCliente', (req, res) => {
-   console.log(req);
-        res.render('paginaCliente', {
-            login: true,
-            name: req.session.name
-        });
-   
-    res.end();
-    });
 
 
+//Cerrar sesion
 app.get('/logout', (req, res) => {
     req.session.destroy(() => {
 
         res.redirect('/')
     })
 })
-//fin de login
+
 
 app.listen(3000, (req, res) => {
 
