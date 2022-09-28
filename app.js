@@ -39,7 +39,11 @@ app.get('/registroCliente', (req,res)=>{
 )
 
 app.get('/paginaServicio',(req,res)=>{
-    res.render('paginaServicio');
+    res.render('paginaServicio', {
+        login: true,
+        name: req.session.name,
+    });
+    res.end();
 })
 
 app.get('/paginaCliente', (req, res) => {
@@ -50,9 +54,10 @@ app.get('/paginaCliente', (req, res) => {
              surname: req.session.surname,
              email: req.session.email,
              location: req.session.location,
-             direction: req.session.direccion
+             direction: req.session.direccion,
+
          });
-    
+
      res.end();
      });
 app.get('/registroServicio', (req, res)=>{
@@ -124,7 +129,7 @@ app.post('/registroServicio',async(req,res)=> {
                 alertIcon: 'success',
                 showConfirmButton: false,
                 timer: 1500,
-                ruta: 'paginaServicio'
+                ruta: ''
             })
         }
     })
@@ -156,6 +161,17 @@ app.post('/auth', async (req, res) => {
                 req.session.location = results[0].localidad;
                 req.session.direction = results[0].direccion;
                 req.session.user_id = results[0].id;
+                req.session.logServicio = false;
+                //Preguntar si tiene un servicio enlazado
+                connection.query('SELECT * FROM servicio WHERE idCliente = ?', [req.session.user_id], async (error, results) =>{
+                    if(results.length != 0){
+                        req.session.logServicio = true; 
+                        req.session.nameServicio = results[0].nombreNegocio;                       
+                    }
+                });
+                console.log(req.session.logServicio);
+
+
 
                 res.render('iniciarSesion', {
                     alert: true,
