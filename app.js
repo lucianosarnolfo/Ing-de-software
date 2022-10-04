@@ -226,7 +226,7 @@ app.post("/auth", async (req, res) => {
           req.session.email = results[0].email;
           req.session.location = results[0].localidad;
           req.session.direction = results[0].direccion;
-          req.session.user_id = results[0].id;
+          req.session.user_id = results[0].idCliente;
           req.session.logServicio = false;
           //Preguntar si tiene un servicio 
                await connection.query('SELECT * FROM servicio WHERE idCliente = ?', [req.session.user_id], async (error, results) =>{

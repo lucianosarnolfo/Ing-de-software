@@ -5,7 +5,6 @@ const localidad = document.getElementById('localidad')
 const direccion = document.getElementById('direccion')
 const email = document.getElementById('email')
 const constraseña = document.getElementById('password')
-//const confirmarContraseña = document.getElementById('passConfirma')
 
 form.addEventListener('submit', (e) => {
     if(validaCampos() != true) {
@@ -23,7 +22,6 @@ const validaCampos = () => {
     const valorDireccion = direccion.value.trim()
     const valorEmail = email.value.trim()
     const valorContraseña = constraseña.value.trim()
-    //const valorConfirmarContraseña = confirmarContraseña.value.trim()
 
     //Validando campo nombre
     if (!valorNombre) {
@@ -80,16 +78,6 @@ const validaCampos = () => {
         totalPass++
     }
 
-    /*
-    //Validando campo confirmar contraseña
-    if (!valorConfirmarContraseña) {
-        validaFalla(confirmarContraseña, 'Confirme su contraseña')
-    } else if (valorContraseña !== valorConfirmarContraseña) {
-        validaFalla(confirmarContraseña, 'La contraseña no coincide')
-    } else {
-        validaOk(confirmarContraseña)
-    }
-    */
     return (totalPass == 6)
 }
 
