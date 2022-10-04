@@ -29,6 +29,23 @@ app.use(
 const connection = require("./database/db");
 
 //Vistas
+app.get("/", (req, res) => {
+  
+
+
+  if (req.session.loggedin) {
+    res.render("index", {
+      login: true,
+      name: req.session.name,
+    });
+  } else {
+    res.render("index", {
+      login: false,
+      name: "Debe iniciar sesión",
+    });
+  }
+  res.end();
+});
 app.get("/iniciarSesion", (req, res) => {
   res.render("iniciarSesion");
 });
@@ -246,20 +263,7 @@ app.post("/auth", async (req, res) => {
 });
 
 //iniciar sesion
-app.get("/", (req, res) => {
-  if (req.session.loggedin) {
-    res.render("index", {
-      login: true,
-      name: req.session.name,
-    });
-  } else {
-    res.render("index", {
-      login: false,
-      name: "Debe iniciar sesión",
-    });
-  }
-  res.end();
-});
+
 
 //Cerrar sesion
 app.get("/logout", (req, res) => {
