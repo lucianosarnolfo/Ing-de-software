@@ -1,20 +1,18 @@
 
-const form = document.getElementById('formulario')
-const nombreNegocio = document.getElementById('nombreNegocio')
-const localidad = document.getElementById('localidad')
-const direccion = document.getElementById('direccion')
-const telefono = document.getElementById('telefono')
-const tipoDeServicio = document.getElementById('tipo')
+const form = document.getElementById("formulario")
+const nombreNegocio = document.getElementById("nombreNegocio")
+const localidad = document.getElementById("localidad")
+const direccion = document.getElementById("direccion")
+const telefono = document.getElementById("telefono")
+const tipoDeServicio = document.getElementById("tipo")
 
-form.addEventListener('submit', (e) => {
+form.addEventListener("submit", (e) => {
     if (validaCampos() == false) {
         e.preventDefault()
     }
 }, false)
 
 const validaCampos = () => {
-
-    let totalPass = 0
 
     const valorNombreNegocio = nombreNegocio.value.trim()
     const valorLocalidad = localidad.value.trim()
@@ -24,59 +22,63 @@ const validaCampos = () => {
 
     //Validando nombre de negocio
     if (!valorNombreNegocio) {
-        validaFalla(nombreNegocio, 'Campo vacío')
+        validaFalla(nombreNegocio, "Campo vacío")
+        return false
     } else {
         validaOk(nombreNegocio)
-        totalPass++
     }
 
     //Validando localidad
     if (!valorLocalidad) {
-        validaFalla(localidad, 'Campo vacío')
+        validaFalla(localidad, "Campo vacío")
+        return false
     } else {
         validaOk(localidad)
-        totalPass++
     }
 
     //Validando direccion
     if (!valorDireccion) {
-        validaFalla(direccion, 'Campo vacío')
+        validaFalla(direccion, "Campo vacío")
+        return false
     } else {
         validaOk(direccion)
-        totalPass++
     }
 
     //Validando telefono
     const exr = /^(\d{4})[-]?(\d{6})$/
 
     if (!valorTelefono) {
-        validaFalla(telefono, 'Campo vacío')
+        validaFalla(telefono, "Campo vacío")
+        return false
     } else if (!valorTelefono.match(exr)) {
-        validaFalla(telefono, 'Debe contener el siguiente formato 3576-470820')
+        validaFalla(telefono, "Debe contener el siguiente formato 3576-470820")
+        return false
     } else {
         validaOk(telefono)
-        totalPass++
     }
 
-    if(valorServicio === 'Selecciones un tipo de servicio'){
-        validaFalla(tipoDeServicio, 'Debe seleccionar un tipo de servicio')
+    if(valorServicio === "Selecciones un tipo de servicio"){
+        validaFalla(tipoDeServicio, "Debe seleccionar un tipo de servicio")
+        return false
     } else {
         validaOk(tipoDeServicio)
-        totalPass++
     }
 
-    return (totalPass == 5)
+    return true
 }
 
 const validaFalla = (input, mensaje) => {
     const formControl = input.parentElement
-    const aviso = formControl.querySelector('p')
+    const aviso = formControl.querySelector("p")
     aviso.innerText = mensaje
 
-    formControl.className = 'form-control falla'
+    formControl.className = "form-control falla"
 }
 
 const validaOk = (input) => {
     const formControl = input.parentElement
-    formControl.className = 'form-control ok'
+    const aviso = formControl.querySelector("p")
+    aviso.innerText = ""
+
+    formControl.className = "form-control ok"
 }
