@@ -43,35 +43,37 @@
       </header>
       <!-- ========== End Section ========== -->
       <section>
-         <div class="container-fluid me-3 mt-3 align-items-center">
-            <h1>Informacion del servicio:</h1>
-            <ul>
-               <li>
-                  <h4>Nombre de negocio: <strong>
-                     <%= nameNegocio %>
-                     </strong>
-                  </h4>
-               </li>
-               <li>
-                  <h4>Localidad: <strong>
-                     <%= location %>
-                     </strong>
-                  </h4>
-               </li>
-               <li>
-                  <h4>Direccion: <strong>
-                     <%= direction %>
-                     </strong>
-                  </h4>
-               </li>
-               <li>
-                  <h4>Telefono: <strong>
-                     <%= telefono %>
-                     </strong>
-                  </h4>
-               </li>
-            </ul>
-         </div>
+         <% for(var i in service) { %>
+            <div class="container-fluid me-3 mt-3 align-items-center">
+               <h1>Informacion del servicio:</h1>
+               <ul>
+                  <li>
+                     <h4>Nombre de negocio: <strong>
+                        <%= service[i].nombreNegocio %>
+                        </strong>
+                     </h4>
+                  </li>
+                  <li>
+                     <h4>Localidad: <strong>
+                        <%= service[i].localidad %>
+                        </strong>
+                     </h4>
+                  </li>
+                  <li>
+                     <h4>Direccion: <strong>
+                        <%= service[i].direccion %>
+                        </strong>
+                     </h4>
+                  </li>
+                  <li>
+                     <h4>Telefono: <strong>
+                        <%= service[i].telefono %>
+                        </strong>
+                     </h4>
+                  </li>
+               </ul>
+            </div>
+         <% } %>
       </section>
    </body>
 </html>

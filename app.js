@@ -27,10 +27,11 @@ app.use(
 );
 
 const connection = require("./database/db");
+const cons = require("consolidate");
 
 //Vistas
 app.get("/", (req, res) => {
-  
+
 
 
   if (req.session.loggedin) {
@@ -55,34 +56,23 @@ app.get("/registroCliente", (req, res) => {
 });
 
 app.get("/paginaServicio", async (req, res) => {
-  await connection.query(
-    "SELECT * FROM servicio WHERE idCliente = ?",
-    [req.session.user_id],
-    async (error, results) => {
-      if(error)throw err;
-      if (results.length != 0) {
-        req.session.nameNegocio = results[0].nombreNegocio;
-        req.session.telefonoNegocio = results[0].telefono;
-        req.session.localidadNegocio = results[0].localidad;
-        req.session.direccionNegocio = results[0].direccion;
-        console.log(req.session.nameNegocio);
-        console.log(req.session.telefonoNegocio);
-        res.render("paginaServicio", {
+  var arrSrvcID = [];
+  connection.query("SELECT * FROM `cliente_tiene_servicio` WHERE `cliente_idCliente` = ?", [req.session.user_id], async (error, results) => {
+    if(results.length !== 0){
+      for(var i in results){
+        arrSrvcID.push("\'" + results[i].servicio_idServicio + "\'");
+      }
+      connection.query("SELECT * from `servicio` WHERE `idServicio` IN (" + arrSrvcID.join(',') + ")", async (error, results) => {
+        console.log(results);
+        await res.render("paginaServicio", {
           login: true,
           name: req.session.name,
-          nameNegocio: req.session.nameNegocio,
-          telefono: req.session.telefonoNegocio,
-          location: req.session.localidadNegocio,
-          direction: req.session.direccionNegocio
+          service: results
         });
         res.end();
-      }
-      
+      })
     }
-  
-  );
-
-  
+  })
 });
 
 app.get("/paginaCliente", (req, res) => {
@@ -110,14 +100,14 @@ app.post("/registroCliente", async (req, res) => {
   const direccion = req.body.direccion;
   const email = req.body.email;
   const password = req.body.password;
-  let passwordHaash = await bcryptjs.hash(password, 8);
+  let passwordHash = await bcryptjs.hash(password, 8);
 
   connection.query(
     "SELECT * FROM `cliente` WHERE `email` = ?",
     [email],
-    (err, result) => {
-      if (err) throw err;
-      if (result.length > 0) {
+    (error, results) => {
+      if (error) throw error;
+      if (results.length > 0) {
         res.render("registroCliente", {
           alert: true,
           alertTitle: "Registro",
@@ -136,7 +126,7 @@ app.post("/registroCliente", async (req, res) => {
             localidad: localidad,
             direccion: direccion,
             email: email,
-            password: passwordHaash,
+            password: passwordHash,
           },
           async (error, results) => {
             if (error) {
@@ -175,32 +165,32 @@ app.post("/registroServicio", async (req, res) => {
       localidad: localidad,
       direccion: direccion,
       telefono: telefono,
-      idCliente: id,
       tipoDeServicio: tipo,
-    },
-    async (error, results) => {
-      if (error) {
-        console.log(error);
-      } else {
-        res.render("registroServicio", {
-          alert: true,
-          alertTitle: "Registro",
-          alertMessage: "¡Registro exitoso!",
-          alertIcon: "success",
-          showConfirmButton: false,
-          timer: 1500,
-          ruta: "",
-        });
-      }
     }
   );
+
+  connection.query("SELECT MAX(idServicio) AS Max_Id FROM servicio", async (error, results) => {
+    if (results.length !== 0) {
+      connection.query("INSERT INTO `cliente_tiene_servicio` (`cliente_idCliente`, `servicio_idServicio`) VALUES ( \'" + id + "\', \'" + results[0].Max_Id + "\')");
+      console.log("PEKO PEKO PEKO");
+    }
+  });
+
+  res.render("registroServicio", {
+    alert: true,
+    alertTitle: "Registro",
+    alertMessage: "¡Registro exitoso!",
+    alertIcon: "success",
+    showConfirmButton: false,
+    timer: 1500,
+    ruta: "",
+  });
 });
 
 //iniciar sesion
 app.post("/auth", async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
-  let passwordHaash = await bcryptjs.hash(password, 8);
   if (email && password) {
     connection.query(
       "SELECT * FROM cliente WHERE email = ?",
@@ -212,7 +202,7 @@ app.post("/auth", async (req, res) => {
         ) {
           res.render("iniciarSesion", {
             alert: true,
-            alertTitle: "Error",
+            alertTitle: "error",
             alertMessage: "Usuario y/o password incorrectas",
             alertIcon: "error",
             showConfirmButton: true,
@@ -227,15 +217,6 @@ app.post("/auth", async (req, res) => {
           req.session.location = results[0].localidad;
           req.session.direction = results[0].direccion;
           req.session.user_id = results[0].idCliente;
-          req.session.logServicio = false;
-          //Preguntar si tiene un servicio 
-               await connection.query('SELECT * FROM servicio WHERE idCliente = ?', [req.session.user_id], async (error, results) =>{
-                    if(results.length != 0){
-                        req.session.logServicio = true;
-                        console.log(req.session.logServicio);                      
-                    }
-                });     
-                console.log("pepito");
           res.render("iniciarSesion", {
             alert: true,
             alertTitle: "Conexion exitosa",
@@ -246,6 +227,7 @@ app.post("/auth", async (req, res) => {
             ruta: "/",
           });
         }
+        console.log("YUBI YUBI");
         res.end();
       }
     );
@@ -265,7 +247,7 @@ app.post("/auth", async (req, res) => {
 //iniciar sesion
 
 
-//Cerrar sesion
+//Cerrorar sesion
 app.get("/logout", (req, res) => {
   req.session.destroy(() => {
     res.redirect("/");
