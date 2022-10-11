@@ -36,7 +36,8 @@ const cons = require("consolidate");
 //Vistas
 app.get("/", (req, res) => {
 
-
+    let formBuscar = req.body.buscar;
+    console.log(formBuscar);
 
     if (req.session.loggedin) {
         res.render("index", {
@@ -51,6 +52,28 @@ app.get("/", (req, res) => {
     }
     res.end();
 });
+
+app.post("/",(req,res)=>{
+    let formBuscar = req.body.barraBuscar;
+    console.log(formBuscar);
+    let array=[];
+    connection.query("SELECT * FROM `servicio` WHERE `nombreNegocio` = ?",[formBuscar], async(error, results) =>{
+        if(results.length!==0){
+            for (var i in results) {
+                array.push("\'" + results[i] + "\'");
+            }
+        }
+        console.log(array);
+    });
+    
+
+    res.render("index",{
+        login: false,
+        name: "Debe inciar sesión"
+        
+    })
+});
+
 app.get("/iniciarSesion", (req, res) => {
     res.render("iniciarSesion");
 });
