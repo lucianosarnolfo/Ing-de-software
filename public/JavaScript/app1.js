@@ -1,13 +1,12 @@
-const form = document.getElementById('formulario')
-const nombre = document.getElementById('nombre')
-const apellido = document.getElementById('apellido')
+const form = document.getElementById("formulario")
+const nombre = document.getElementById("nombre")
+const apellido = document.getElementById("apellido")
 const localidad = document.getElementById('localidad')
-const direccion = document.getElementById('direccion')
-const email = document.getElementById('email')
-const constraseña = document.getElementById('password')
-//const confirmarContraseña = document.getElementById('passConfirma')
+const direccion = document.getElementById("direccion")
+const email = document.getElementById("email")
+const constraseña = document.getElementById("password")
 
-form.addEventListener('submit', (e) => {
+form.addEventListener("submit", (e) => {
     if(validaCampos() != true) {
         e.preventDefault()
     }
@@ -15,95 +14,87 @@ form.addEventListener('submit', (e) => {
 
 const validaCampos = () => {
 
-    let totalPass = 0
-
     const valorNombre = nombre.value.trim()
     const valorApellido = apellido.value.trim()
     const valorLocalidad = localidad.value.trim()
     const valorDireccion = direccion.value.trim()
     const valorEmail = email.value.trim()
     const valorContraseña = constraseña.value.trim()
-    //const valorConfirmarContraseña = confirmarContraseña.value.trim()
 
     //Validando campo nombre
     if (!valorNombre) {
-        validaFalla(nombre, 'Campo vacío')
+        validaFalla(nombre, "Campo vacío")
+        return false
     } else {
         validaOk(nombre)
-        totalPass++
     }
 
     //Validando campo apellido
     if (!valorApellido) {
-        validaFalla(apellido, 'Campo vacío')
+        validaFalla(apellido, "Campo vacío")
+        return false
     } else {
         validaOk(apellido)
-        totalPass++
     }
 
     //Validando campo localidad
     if (!valorLocalidad) {
-        validaFalla(localidad, 'Campo vacío')
+        validaFalla(localidad, "Campo vacío")
+        return false
     } else {
         validaOk(localidad)
-        totalPass++
     }
 
     //Validando campo dirección
     if (!valorDireccion) {
-        validaFalla(direccion, 'Campo vacío')
+        validaFalla(direccion, "Campo vacío")
+        return false
     } else {
         validaOk(direccion)
-        totalPass++
     }
 
     //Validando campo email
     if (!valorEmail) {
-        validaFalla(email, 'Campo vacío')
+        validaFalla(email, "Campo vacío")
+        return false
     } else if (!validaEmail(valorEmail)) {
-        validaFalla(email, 'El email no es válido')
+        validaFalla(email, "El email no es válido")
+        return false
     } else {
         validaOk(email)
-        totalPass++
     }
 
     //Validando campo contraseña
     const er = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,18}$/
     if (!valorContraseña) {
-        validaFalla(constraseña, 'Campo vacío')
+        validaFalla(constraseña, "Campo vacío")
+        return false
     } else if (valorContraseña.length < 8) {
-        validaFalla(constraseña, 'Debe tener 8 caracteres como minimo')
+        validaFalla(constraseña, "Debe tener 8 caracteres como minimo")
+        return false
     } else if (!valorContraseña.match(er)) {
-        validaFalla(constraseña, 'Debe tener al menos una may. , una min. , y un núm')
+        validaFalla(constraseña, "Debe tener al menos una may. , una min. , y un núm")
+        return false
     } else {
         validaOk(constraseña)
-        totalPass++
     }
 
-    /*
-    //Validando campo confirmar contraseña
-    if (!valorConfirmarContraseña) {
-        validaFalla(confirmarContraseña, 'Confirme su contraseña')
-    } else if (valorContraseña !== valorConfirmarContraseña) {
-        validaFalla(confirmarContraseña, 'La contraseña no coincide')
-    } else {
-        validaOk(confirmarContraseña)
-    }
-    */
-    return (totalPass == 6)
+    return true
 }
 
 const validaFalla = (input, mensaje) => {
     const formControl = input.parentElement
-    const aviso = formControl.querySelector('p')
+    const aviso = formControl.querySelector("p")
     aviso.innerText = mensaje
 
-    formControl.className = 'form-control falla'
+    formControl.className = "form-control falla"
 }
 
 const validaOk = (input) => {
     const formControl = input.parentElement
-    formControl.className = 'form-control ok'
+    const aviso = formControl.querySelector("p")
+    aviso.innerText = ""
+    formControl.className = "form-control ok"
 }
 
 const validaEmail = (email) => {

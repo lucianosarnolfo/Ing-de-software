@@ -1,140 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Servicios a domicilio</title>
-    <!-- CSS only -->
-    <link rel="stylesheet" href="css/style.css"/>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
-</head>
-<body>
-<!-- ========== Start Section ==========
-
-    <nav class="navbar navbar-dark bg-dark fixed-top">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="#">Servicios a domicilio</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
-            <div class="offcanvas-header">
-              <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Menú</h5>
-              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-              <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="páginaServicio.html">Perfil</a>
-                </li>
-                <div class="row-cols-auto">
-                    <div class="col">
-                        <button type="button" class="btn btn-secondary btn-sm">
-                            Notificaciones <span class="badge text-bg-dark">4</span>
-                        </button>
-                    </div>
+   <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Servicios a domicilio</title>
+      <!-- CSS only -->
+      <link rel="stylesheet" href="css/style.css" />
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
+         integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+      <!-- JavaScript Bundle with Popper -->
+      <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+         integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+         crossorigin="anonymous"></script>
+   </head>
+   <body>
+      <!-- ========== NavBar ========== -->
+      <header>
+         <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+               <a class="navbar-brand" href="/">Serivicio a domicilio</a>
+               <div>
+                  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <li class="nav-item dropdown">
+                           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                              aria-expanded="false">
+                           Bienvenido <strong>
+                           <%= name %>
+                           </strong>
+                           </a>
+                           <ul class="dropdown-menu">
+                              <li><a class="dropdown-item" href="paginaCliente">Ir a mi perfil</a></li>
+                              <li><a class="dropdown-item" href="logout">Cerrar sesión</a></li>
+                           </ul>
+                        </li>
+                     </ul>
                   </div>
-              </ul>
+               </div>
             </div>
-          </div>
-        </div>
-      </nav>
-
-    <hr>
-    <hr>
-    <hr>
-    
-    <div class="container-fluid w-25 px-5 py-3 float-lg-start rounded shadow">
-        <div class="row">
-            <div class="col">
-                <p class="h4">Jardinería</p>
-                <figure class="figure">
-                    <img src="Imágenes/Jardineria.jpg" class="figure-img img-fluid rounded" alt="..">
-                    <figcaption class="figure-caption">
-                        <button type="button" class="btn btn-dark" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .6rem; --bs-btn-font-size: .68rem;">
-                            Cambiar foto
-                        </button>   
-                    </figcaption>
-                </figure>
+         </nav>
+      </header>
+      <!-- ========== End Section ========== -->
+      <section>
+         <% for(var i in service) { %>
+            <div class="container-fluid me-3 mt-3 align-items-center">
+               <h1>Informacion del servicio:</h1>
+               <ul>
+                  <li>
+                     <h4>Nombre de negocio: <strong>
+                        <%= service[i].nombreNegocio %>
+                        </strong>
+                     </h4>
+                  </li>
+                  <li>
+                     <h4>Localidad: <strong>
+                        <%= service[i].localidad %>
+                        </strong>
+                     </h4>
+                  </li>
+                  <li>
+                     <h4>Direccion: <strong>
+                        <%= service[i].direccion %>
+                        </strong>
+                     </h4>
+                  </li>
+                  <li>
+                     <h4>Telefono: <strong>
+                        <%= service[i].telefono %>
+                        </strong>
+                     </h4>
+                  </li>
+               </ul>
             </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <div class="mb-3">
-                    <label for="select1"><p class="h4">Seleccione horario de atención</p></label>
-                    <select id="select1" class="form-select">
-                        <option value="1">8:00-12:00</option>
-                        <option value="1">14:00-16:00</option>
-                        <option value="1">16:00-18:00</option>
-                    </select>
-                </div>
-            </div>
-            <div clas="col">
-                <p class="h4">Trabaja a domicilio</p>
-                <div class="form-check form-switch form-check-inline">
-                    <input type="checkbox" class="form-check-input" value="" id="check1">
-                    <label for="check1" class="form-check-label">Si</label>
-                </div>
-                <div class="form-check form-switch form-check-inline">
-                    <input type="checkbox" class="form-check-input" value="" id="check2">
-                    <label for="check2" class="form-check-label">No</label>
-                </div>
-            </div>
-            <div class="col">
-                <p class="h4">Precio de servicio</p>
-                <div class="input-group">
-                    <span class="input-group-text">$</span>
-                    <input type="text" class="form-control" placeholder="cantidad">
-                </div>
-            </div>
-
-        </div>
-    </div>
- -->
-    <!-- ========== NavBar ========== -->
-    <header>
-        <nav class="navbar navbar-expand-lg">
-          <div class="container-fluid">
-            <a class="navbar-brand" href="/">Serivicio a domicilio</a>
-        
-            <div>
-                              
-           
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                  <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Bienvenido  <strong><%= name %></strong> 
-                      </a>
-                      <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="paginaCliente">Ir a mi perfil</a></li>
-                        <li><a class="dropdown-item" href="logout">Cerrar sesión</a></li>
-                      </ul>
-                    </li>
-                  </ul>
-                </div>                   
-            
-          </div>
-        
-        
-          </div>
-        </nav>
-        </header>
-        <!-- ========== End Section ========== -->
-<section>
-  
-  <div class="container-fluid me-3 mt-3 align-items-center">
-    <h1>Informacion del servicio:</h1>
-   <ul>
-    <li><h4>Nombre de negocio: <strong><%= nameNegocio %></strong></h4></li>
-    <li><h4>Localidad: <strong><%= location %></strong></h4></li>
-    <li><h4>Direccion: <strong><%= direction %></strong></h4></li>
-    <li><h4>Telefono: <strong><%= telefono %></strong></h4></li>
-   </ul>
-  </div>
-</section>
-    <!-- JavaScript Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
-</body>
+         <% } %>
+      </section>
+   </body>
 </html>
