@@ -35,10 +35,6 @@ const cons = require("consolidate");
 
 //Vistas
 app.get("/", (req, res) => {
-
-    let formBuscar = req.body.buscar;
-    console.log(formBuscar);
-
     if (req.session.loggedin) {
         res.render("index", {
             login: true,
@@ -53,25 +49,44 @@ app.get("/", (req, res) => {
     res.end();
 });
 
-app.post("/",(req,res)=>{
-    let formBuscar = req.body.barraBuscar;
-    console.log(formBuscar);
-    let array=[];
-    connection.query("SELECT * FROM `servicio` WHERE `nombreNegocio` = ?",[formBuscar], async(error, results) =>{
-        if(results.length!==0){
-            for (var i in results) {
-                array.push("\'" + results[i] + "\'");
+app.post("/", async (req, res) => {
+    let formBuscar = req.body.buscar;
+    connection.query("SELECT * FROM `servicio` WHERE `nombreNegocio` REGEXP ?", [formBuscar], async (error, results) => {
+        if (results.length !== 0) {
+            if (req.session.loggedin) {
+                res.render("buscador", {
+                    login: true,
+                    name: req.session.name,
+                    service: results,
+                    lstSearch: formBuscar
+                })
+            } else {
+                res.render("buscador", {
+                    login: false,
+                    name: "Debe inciar sesión",
+                    service: results,
+                    lstSearch: formBuscar
+                })
+            }
+        } else {
+            if (req.session.loggedin) {
+                res.render("buscador", {
+                    login: true,
+                    name: req.session.name,
+                    service: results,
+                    lstSearch: formBuscar
+                })
+            } else {
+                res.render("buscador", {
+                    login: false,
+                    name: "Debe inciar sesión",
+                    service: results,
+                    lstSearch: formBuscar
+                })
             }
         }
-        console.log(array);
+        res.end()
     });
-    
-
-    res.render("index",{
-        login: false,
-        name: "Debe inciar sesión"
-        
-    })
 });
 
 app.get("/iniciarSesion", (req, res) => {
@@ -150,18 +165,18 @@ app.post("/registroCliente", async (req, res) => {
                     timer: 2000,
                     ruta: "",
                 });
-            } 
+            }
             /* Si el e-mail no esta resgitrado se puede proceder con el registro del usuario*/
             else {
                 connection.query(
                     "INSERT INTO cliente SET ?", {
-                        nombre: nombre,
-                        apellido: apellido,
-                        localidad: localidad,
-                        direccion: direccion,
-                        email: email,
-                        password: passwordHash,
-                    },
+                    nombre: nombre,
+                    apellido: apellido,
+                    localidad: localidad,
+                    direccion: direccion,
+                    email: email,
+                    password: passwordHash,
+                },
                     async (error, results) => {
                         if (error) {
                             console.log(error);
@@ -194,12 +209,12 @@ app.post("/registroServicio", async (req, res) => {
     /* Insertar los datos del servicio en la tabla "servicio" */
     connection.query(
         "INSERT INTO servicio SET ?", {
-            nombreNegocio: nombreNegocio,
-            localidad: localidad,
-            direccion: direccion,
-            telefono: telefono,
-            tipoDeServicio: tipo,
-        }
+        nombreNegocio: nombreNegocio,
+        localidad: localidad,
+        direccion: direccion,
+        telefono: telefono,
+        tipoDeServicio: tipo,
+    }
     );
     /* Asociar el servicio con el usuario actualmente ha iniciado sesion */
     connection.query("SELECT MAX(idServicio) AS Max_Id FROM servicio", async (error, results) => {
